@@ -9,6 +9,14 @@ class User_model extends CI_Model{
         $query=$this->db->query("insert into user(uid,uname,pass) values(null,'$name','$pwd')");
         return $query;
     }
+    public function get_sel($name,$pwd){
+        $arr=array(
+            'uname'=>$name,
+            'pass'=>$pwd,
+        );
+        $query=$this->db->get_where('user',$arr);
+        return $query->row();
+    }
 }
 
 ?>
