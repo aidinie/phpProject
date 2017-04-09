@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       public function __construct()
       {
           parent::__construct();
+          $this->load->library('pagination');
       }
       public function reg(){
           $this->load->view('reg.php');
@@ -42,7 +43,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           }
       }
       public function index(){
-          $this->load->view('index.php');
+//          $this->load->model('user_model');
+//          $rs= $this->user_model->getdata();
+          $this->load->model('user_model');
+          $rows=$this->user_model->getallrows();
+//          $allrows=$rows->allrows;
+          $site=site_url('user/index');
+
+          $config['base_url'] = $site;
+          $config['total_rows'] = $rows;
+          $config['per_page'] = 3;
+          $config['first_link'] = 'First';
+          $config['last_link'] = 'Last';
+          $this->pagination->initialize($config);
+          $startno=$this->uri->segment(3)==NULL? 0 : $this->uri->segment(3);
+          $rs= $this->user_model->fenye($startno,$config['per_page']);
+          $arr['bloglist']=$rs;
+          $this->load->view('index.php',$arr);
+          
       }
       public function dologin(){
           $name=$this->input->post('uname');
@@ -55,11 +73,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   'uname'  => $rs->uname,
                   'uid'     => $rs->uid,
               );
-
-
               $this->session->set_userdata($newdata);
            redirect('user/index');
           }
       }
+
   }
 ?>
