@@ -17,6 +17,22 @@ class User_model extends CI_Model{
         $query=$this->db->get_where('user',$arr);
         return $query->row();
     }
+    public function getdata(){
+        $query=$this->db->get('blog');
+        return $query->result();
+    }
+    public function getallrows(){
+//        $query=$this->db->query('select count(*) as allrows from blog');
+//        return $query->row();
+        $query=$this->db->count_all('blog');
+        return $query;
+    }
+    public function fenye($startno,$pagenum){
+//        $sql="select * from blog limit ".$startno.",".$pagenum;
+//        $query=$this->db->query($sql);
+        $query=$this->db->get('blog',$pagenum,$startno);
+        return $query->result();
+    }
 }
 
 ?>
